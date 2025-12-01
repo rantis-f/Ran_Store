@@ -18,7 +18,8 @@ const SetupPage = () => {
   }, [isOpen, onOpen])
   return (
     <div className="p-4">
-      Root Page
+      <div>Root Page</div>
+      <UserButton/>
     </div>
   );
 }
