@@ -4,6 +4,7 @@ import { AlertModal } from "@/components/modals/alert-modal"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Heading } from "@/components/ui/heading"
+import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { useOrigin } from "@/hooks/use-origin"
@@ -22,15 +23,15 @@ interface BannerFormProps {
 }
 
 const formSchema = z.object({
-    label: z.string().min(1, {
-        message: "String must contain at least 1 character(s)."
-    }),
-    imageUrl: z.string().min(1, {
-        message: "String must contain at least 1 character(s)."
-    })
-})
+  label: z.string().min(1, {
+    message: "Label banner harus diisi!",
+  }),
+  imageUrl: z.string().min(1, {
+    message: "Gambar banner harus diupload!", 
+  }),
+});
 
-type SettingsFormValues = z.infer<typeof formSchema>
+type BannerFormValues = z.infer<typeof formSchema>
 
 export const BannerForm: React.FC<BannerFormProps> = ({
     initialData
@@ -47,7 +48,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     const toastMessage = initialData ? "Banner Berhasil diedit" : "Banner Berhasil dibuat"
     const action = initialData ? "Simpan Banner" : "Buat Banner"
 
-    const form = useForm<SettingsFormValues>({
+    const form = useForm<BannerFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             label: '',
@@ -55,12 +56,17 @@ export const BannerForm: React.FC<BannerFormProps> = ({
         }
     })
 
-    const onSubmit = async (data: SettingsFormValues) => {
+    const onSubmit = async (data: BannerFormValues) => {
         try {
             setLoading(true)
-            await axios.patch(`/api/stores/${params.storeId}`, data)
+            if (initialData) {
+                await axios.patch(`/api/stores/${params.storeId}/banners/${params.bannerId}`, data)
+            } else {
+                await axios.post(`/api/stores/${params.storeId}/banners`, data)
+            }
             router.refresh()
-            toast.success("Toko berhasil diupdate")
+            router.push(`/${params.storeId}/banners/`)
+            toast.success(toastMessage)
         } catch {
             toast.error("Cek kembali data yang diinput")
         } finally {
@@ -71,10 +77,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     const onDelete = async () => {
         try {
             setLoading(true)
-            await axios.delete(`/api/stores/${params.storeId}`)
+            await axios.delete(`/api/${params.storeId}/banners/${params.bannerId}`)
             router.refresh()
             router.push('/')
-            toast.success("Toko berhasil dihapus")
+            toast.success("Banner berhasil dihapus")
         } catch (error) {
             toast.error("Cek kembali data dan koneksi mu")
         } finally {
@@ -95,18 +101,18 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 <Heading
                     title={title}
                     description={description}
-                    />
-                    {initialData && (
+                />
+                {initialData && (
 
-                <Button
-                    disabled={loading}
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => setOpen(true)}
-                >
-                    <Trash className="h-4 w-4" />
-                </Button>
-                    )}
+                    <Button
+                        disabled={loading}
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setOpen(true)}
+                    >
+                        <Trash className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
             <Separator />
             <Form {...form}>
@@ -120,6 +126,25 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                                     <FormLabel>Label</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Label Banner" disabled={loading} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Label</FormLabel>
+                                    <FormControl>
+                                        <ImageUpload
+                                            disabled={loading}
+                                            onChange={(url) => field.onChange(url)}
+                                            onRemove={() => field.onChange('')}
+                                            value={field.value ? [field.value] : []}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

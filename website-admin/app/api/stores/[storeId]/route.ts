@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
     try {
         const { userId } = await auth()
-        
+
         const { name } = await req.json()
 
         const { storeId } = await params;
@@ -57,7 +57,7 @@ export async function DELETE(
             return new NextResponse("Unauthenticated", { status: 401 })
         }
 
-        if (!params) {
+        if (!storeId) {
             return new NextResponse("Store id dibutuhkan", { status: 400 })
         }
 
