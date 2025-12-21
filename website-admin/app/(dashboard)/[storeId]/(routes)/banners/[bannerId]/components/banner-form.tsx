@@ -23,12 +23,12 @@ interface BannerFormProps {
 }
 
 const formSchema = z.object({
-  label: z.string().min(1, {
-    message: "Label banner harus diisi!",
-  }),
-  imageUrl: z.string().min(1, {
-    message: "Gambar banner harus diupload!", 
-  }),
+    label: z.string().min(1, {
+        message: "Label banner harus diisi!",
+    }),
+    imageUrl: z.string().min(1, {
+        message: "Gambar banner harus diupload!",
+    }),
 });
 
 type BannerFormValues = z.infer<typeof formSchema>
@@ -60,9 +60,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({
         try {
             setLoading(true)
             if (initialData) {
-                await axios.patch(`/api/stores/${params.storeId}/banners/${params.bannerId}`, data)
+                await axios.patch(`/api/${params.storeId}/banners/${params.bannerId}`, data)
             } else {
-                await axios.post(`/api/stores/${params.storeId}/banners`, data)
+                await axios.post(`/api/${params.storeId}/banners`, data)
             }
             router.refresh()
             router.push(`/${params.storeId}/banners/`)
@@ -79,7 +79,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             setLoading(true)
             await axios.delete(`/api/${params.storeId}/banners/${params.bannerId}`)
             router.refresh()
-            router.push('/')
+            router.push(`/${params.storeId}/banners/`)
             toast.success("Banner berhasil dihapus")
         } catch (error) {
             toast.error("Cek kembali data dan koneksi mu")
