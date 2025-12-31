@@ -9,18 +9,18 @@ export async function POST(req: Request,
         const body = await req.json()
         const { storeId } = await params;
 
-        const { label, imageUrl } = body
+        const { name, bannerId } = body
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 })
         }
 
-        if (!label) {
-            return new NextResponse("Nama banner perlu diinput", { status: 400 })
+        if (!name) {
+            return new NextResponse("Nama category perlu diinput", { status: 400 })
         }
 
-        if (!imageUrl) {
-            return new NextResponse("Nama banner perlu diinput", { status: 400 })
+        if (!bannerId) {
+            return new NextResponse("Banner Id perlu diinput", { status: 400 })
         }
 
         if (!storeId) {
@@ -38,18 +38,18 @@ export async function POST(req: Request,
             return new NextResponse("Unauthorized", { status: 401 })
         }
 
-        const banner = await db.banner.create({
+        const category = await db.category.create({
             data: {
-                label,
-                imageUrl,
+                name,
+                bannerId,
                 storeId: storeId
             }
         })
 
-        return NextResponse.json(banner)
+        return NextResponse.json(category)
 
     } catch (error) {
-        console.log("[BANNERS_POST]", error)
+        console.log("[CATEGORIES_POST]", error)
         return new NextResponse("Internal error", { status: 500 })
     }
 }
@@ -63,16 +63,16 @@ export async function GET(req: Request,
             return new NextResponse("Store id URL dibutuhkan", { status: 400 })
         }
 
-        const banner = await db.banner.findMany({
+        const categories = await db.category.findMany({
             where: {
                 storeId: storeId
             }
         })
 
-        return NextResponse.json(banner)
+        return NextResponse.json(categories)
 
     } catch (error) {
-        console.log("[BANNERS_GET]", error)
+        console.log("[CATEGORIES_GET]", error)
         return new NextResponse("Internal error", { status: 500 })
     }
 }

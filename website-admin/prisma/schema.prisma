@@ -30,8 +30,8 @@ model Banner {
   label   String
   imageUrl  String
   categories  Category[]
-  createAt  DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@index([storeId])
 }
