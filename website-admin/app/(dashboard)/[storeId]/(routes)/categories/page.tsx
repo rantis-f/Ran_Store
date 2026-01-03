@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 import { CategoryClient } from "./components/client";
-import { CategoryColumn } from "./components/column";
+import { CategoryColumn } from "./components/columns";
 import { format } from "date-fns";
 
 const CategoriesPage = async ({

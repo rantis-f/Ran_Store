@@ -33,8 +33,9 @@ export async function PATCH(
 ) {
     try {
         const { userId } = await auth()
+        const body = await req.json()
 
-        const { label, imageUrl } = await req.json()
+        const { label, imageUrl } = body
 
         const { storeId, bannerId } = await params;
 
@@ -51,7 +52,7 @@ export async function PATCH(
         }
 
         if (!bannerId) {
-            return new NextResponse("Store id dibutuhkan", { status: 400 })
+            return new NextResponse("Banner id dibutuhkan", { status: 400 })
         }
 
         const storeByUserId = await db.store.findFirst({

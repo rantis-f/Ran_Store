@@ -33,8 +33,9 @@ export async function PATCH(
 ) {
     try {
         const { userId } = await auth()
+        const body = await req.json()
 
-        const { name, bannerId } = await req.json()
+        const { name, bannerId } = body
 
         const { storeId, categoryId } = await params;
 

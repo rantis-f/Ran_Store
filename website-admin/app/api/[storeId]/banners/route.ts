@@ -20,7 +20,7 @@ export async function POST(req: Request,
         }
 
         if (!imageUrl) {
-            return new NextResponse("Nama banner perlu diinput", { status: 400 })
+            return new NextResponse("Image banner perlu diinput", { status: 400 })
         }
 
         if (!storeId) {
