@@ -9,3 +9,17 @@ export interface Category {
     name: string
     banner: Banner
 }
+
+export interface Product {
+    id: string,
+    category: Category,
+    name: string,
+    price: string,
+    isFeatures: boolean,
+    images: Image[]
+}
+
+export interface Image {
+    id: string,
+    url: string
+}
