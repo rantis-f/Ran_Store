@@ -17,6 +17,9 @@ export async function GET(
             where: {
                 id: categoryId
             },
+            include: {
+                banner: true
+            }
         })
 
         return NextResponse.json(category)
