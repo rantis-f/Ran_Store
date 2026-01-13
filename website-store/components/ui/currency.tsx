@@ -9,7 +9,7 @@ const formatter = new Intl.NumberFormat("id-ID", {
 })
 
 interface CurrencyProps {
-    value?: String | Number
+    value?: string | number;
 }
 
 const Currency: React.FC<CurrencyProps> = ({
@@ -18,6 +18,7 @@ const Currency: React.FC<CurrencyProps> = ({
     const [isMounted, setIsMounted ] = useState(false)
 
     useEffect(()=>{
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true)
     },[])
 
